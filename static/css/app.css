@@ -399,7 +399,7 @@
 }
 
 .two-menu .commodity-money .money {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .settlement .list-block ul:before,
@@ -488,6 +488,7 @@
   -webkit-box-flex: 1;
   -ms-flex: 1;
   flex: 1;
+  width: calc(100% - 90px);
 }
 
 .row-order .col-80 .list-block.media-list .item-title {
@@ -647,16 +648,14 @@
 }
 
 .my .list-block .item-after {
-  position: absolute;
-  left: 23.5%;
-  bottom: 40%;
+  margin-left: 20px;
   color: #333333;
   font-size: 18px;
 }
 
 .my .margin-content.content-block {
   background: #ffffff;
-  padding: 15px;
+  padding: 15px 10px;
   margin: 0;
 }
 
@@ -768,6 +767,9 @@
 .invoiceInformation .list-block {
   margin: 15px 0;
 }
+.buttons-row .button{
+  padding: 0;
+}
 
 .invoiceInformation .list-block .item-title,
 .invoiceInformation .list-block input[type=text],
@@ -865,18 +867,63 @@
 .register .item-content .item-inner a,
 .forget .item-content .item-inner a {
   width: 180px;
-  /*font-size: 17px;*/
-  border: 1px solid #FFE600;
+  font-size: 17px;
   background-color: transparent;
   color: #1F2124;
-  /*border-color: #1F2124;*/
-  font-size: 15px;
 }
 /* ��ͼ */
 .BMap_cpyCtrl {
   display: none;
 }
-
+.userlogin .login-button {
+  color: #fff;
+  width: 90%;
+  margin: 20px auto;
+  background: #333;
+  border: none;
+  line-height: 44px;
+}
+.userlogin .login-button:hover {
+  background: #333 !important;
+}
+.userregister .step {
+  position: absolute;
+  left: 0;
+  z-index: 999;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 5px 0;
+  margin: 0;
+  border-bottom: 1px solid #1F2124;
+  background-color: #fff;
+  counter-reset: step;
+}
+.userregister .step .step-item {
+  float: left;
+  width: 49%;
+  list-style: none;
+  text-align: center;
+  font-size: 18px;
+  counter-increment: step;
+  color: #1F2124;
+}
+.userregister .user_register .item-content .item-inner a {
+  width: 180px;
+  font-size: 17px;
+  background: none;
+  color: #1F2124;
+  border:solid 1px #1F2124;
+}
+.userregister .signup-next-button {
+  color: #fff;
+  width: 90%;
+  margin: 20px auto;
+  background: #333;
+  border: none;
+}
+.signup-next-button:hover {
+  background: #333 !important;
+}
 .anchorBL {
   display: none;
 }

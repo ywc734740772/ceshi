@@ -129,13 +129,14 @@ img.width100 {
   font-size: 15px;
 }
 
-
 .commodity-money .money {
   color: #ff0000;
+  font-size: 15px;
 }
 
 .commodity-money .unit {
   color: #c5c5c5;
+  font-size: 15px;
 }
 
 .commodity-money .price {
@@ -150,4 +151,43 @@ img.width100 {
 }
 .bg-red{
   background-color: #ff3b30;
+}
+.searchbar:after {
+  content: none
+}
+.userpassword .page-content {
+  background-color: #f7f7f8;
+  font-size: 18px;
+  color: #1F2124;
+}
+.userpassword .user_register .item-content .item-inner a {
+  font-size: 12px;
+  width: 130px;
+}
+
+.button {
+  color: #1F2124;
+  border-color: #1F2124;
+}
+
+.userpassword .password-button {
+  color: #fff;
+  width: 90%;
+  margin: 20px auto;
+  background: #333;
+  border: none;
+}
+.button.button-big {
+  font-size: 17px;
+  height: 44px;
+  line-height: 42px;
+}
+.weui-mask, .weui-mask_transparent {
+  z-index: 9000;
+ }
+.weui-toast,.weui-dialog,.weui-picker{
+  z-index: 9999;
+}
+.navbar .right {
+  min-width: 20px;
 }
