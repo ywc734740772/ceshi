@@ -2,7 +2,6 @@
   <div class="views">
     <div class="view view-main" data-page="hotsearch">
       <div class="navbar">
-
         <div class="navbar-inner navbar-on-center">
           <div class="left" @click="$router.back(-1)">
             <a href="javascript:" class="back link">
@@ -14,7 +13,7 @@
             <form class="searchbar searchbar-init" @submit.prevent="submitSearch">
               <div class="searchbar-input">
                 <input type="search" placeholder="水果" v-model="searchVal">
-                <a href="javascript:" class="searchbar-clear" :style="`pointer-events:auto;opacity: ${searchVal ? 1 : 0}`" @click="clearSearchVal"></a>
+                  <a href="javascript:" class="searchbar-clear" :style="`pointer-events:auto;opacity: ${searchVal ? 1 : 0}`" @click="clearSearchVal"></a>
               </div>
             </form>
           </div>

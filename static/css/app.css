@@ -148,7 +148,7 @@
   border-radius: 5px;
 }
 
-.selectAddress .list-block input[type=text] {
+.selectAddress .list-block input[type=text],.selectAddress .list-block input[type=tel] {
   font-size: 15px;
 }
 

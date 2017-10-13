@@ -22,7 +22,7 @@
                   <div class="list-block user_register">
                     <div class="content-block-title desc" style="font-size:15px;padding-top: 20px;">
                       <span class="current-email">您当前的手机号码：
-                          <span id="current-phone">{{myInfo.Profile.Mobile|currentPhone}}</span>
+                          <span id="current-phone">{{myInfo.Profile && myInfo.Profile.Mobile && myInfo.Profile.Mobile | currentPhone}}</span>
                       </span>
                     </div>
                     <wv-group>
@@ -59,7 +59,9 @@
     filters: {
       currentPhone(val) {
         let phone = '';
-        phone = val.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+        if (val) {
+          phone = val.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+        }
         return phone;
       }
     },

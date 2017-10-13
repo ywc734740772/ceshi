@@ -66,8 +66,6 @@
         if (!vm.$store.state.userInfo.Profile && localStorage.getItem('userInfo') === null) {
           vm.$router.push('./login');
         }
-        vm.$store.commit('isMenu', true);
-        vm.$store.commit('isLoading', false);
       });
     },
     activated() {
@@ -93,6 +91,12 @@
       CartListInfo: (data) => {
         if (!data.CartInfo.length && localStorage.getItem('CartInfo')) {
           data.CartInfo = JSON.parse(localStorage.getItem('CartInfo'));
+        }
+        if (data.userInfo.UserId !== undefined || localStorage.getItem('userInfo') !== null) {
+          if ((data.CartInfo.length && data.CartInfo[0].UserId) !== ((data.userInfo && data.userInfo.UserId) || JSON.parse(localStorage.getItem('userInfo')).UserId)) {
+            data.CartInfo = [];
+            localStorage.removeItem('CartInfo');
+          }
         }
         return data.CartInfo;
       },

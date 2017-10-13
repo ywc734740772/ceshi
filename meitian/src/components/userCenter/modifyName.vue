@@ -71,12 +71,12 @@
           this.axios({
             method: 'post',
             url: this.$store.state.passportUrl + '/api/Membership/UpdateUserProfile',
-            data: qs.stringify({
+            data: {
               UserId: this.myInfo.UserId,
               Profile: {
                 RealName: this.modifyName
               }
-            })
+            }
           }).then((res) => {
             res = res.data;
             if (!res.IsError) {

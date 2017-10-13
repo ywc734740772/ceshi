@@ -68,15 +68,16 @@
             text: 'loading',
             spinnerType: 'double-snake'
           });
+          let data = {
+            UserId: this.myInfo.UserId,
+            Profile: {
+              NickName: this.modifyNickName
+            }
+          };
           this.axios({
             method: 'post',
             url: this.$store.state.passportUrl + '/api/Membership/UpdateUserProfile',
-            data: qs.stringify({
-              UserId: this.myInfo.UserId,
-              Profile: {
-                NickName: this.modifyNickName
-              }
-            })
+            data: data
           }).then((res) => {
             res = res.data;
             if (!res.IsError) {

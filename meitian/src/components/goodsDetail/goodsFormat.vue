@@ -39,6 +39,7 @@
 
 <script type="text/ecmascript-6">
   import Bscroll from 'better-scroll';
+  import {mapState} from 'vuex';
   import WeVue from 'we-vue';
   import defaultImg from '../../images/11.jpg';
   export default {
@@ -48,6 +49,14 @@
         defaultImg: defaultImg
       };
     },
+    computed: mapState({
+      myInfo: (data) => {
+        if (!data.userInfo.Profile && localStorage.getItem('userInfo')) {
+          data.userInfo = JSON.parse(localStorage.getItem('userInfo'));
+        }
+        return data.userInfo;
+      }
+    }),
     methods: {
       tipToast (msg) {
         WeVue.Toast({
@@ -60,79 +69,87 @@
         this.$emit('isClose', false);
       },
       DetermineSpecifications(item, GoodsPackage) {
+        if (this.myInfo.Profile !== undefined) {
 //        if (this.$store.state.CartInfo.length) {
-        console.log(item);
-        if (item.IsPackage) {
-          let CartIndex = -1;
-          this.$store.state.CartInfo.forEach((val, shopIndex) => {
-            if (val.GoodsId === this.goodsInfo.GoodsId) {
-              let isForeach = true;
-//              if (val.SubGoods.length && this.goodsInfo.SubGoods.length) {
-              for (let [i, item] of new Map(val.SubGoods.map((item, i) => [i, item]))) {
-                if (item.GoodsId !== this.goodsInfo.SubGoods[i].GoodsId) {
-//                  this.goodsInfo.count = null;
-//                  this.goodsInfo.OrderQuantity = null;
-                  isForeach = false;
-                  console.log(item.GoodsId);
-                  break;
+          if (item.IsPackage) {
+            let CartIndex = -1;
+            this.$store.state.CartInfo.forEach((val, shopIndex) => {
+              if (val.GoodsId === this.goodsInfo.GoodsId) {
+                let isForeach = true;
+  //              if (val.SubGoods.length && this.goodsInfo.SubGoods.length) {
+                for (let [i, item] of new Map(val.SubGoods.map((item, i) => [i, item]))) {
+                  if (item.GoodsId !== this.goodsInfo.SubGoods[i].GoodsId) {
+  //                  this.goodsInfo.count = null;
+  //                  this.goodsInfo.OrderQuantity = null;
+                    isForeach = false;
+                    break;
+                  }
                 }
+  //                val.SubGoods.forEach((data, index) => {
+  //                  if (data.GoodsId !== this.goodsInfo.SubGoods[index].GoodsId) {
+  //                   if (isForeach) {
+  //                      this.goodsInfo.count = null;
+  //                      this.goodsInfo.OrderQuantity = null;
+  //                      isForeach = false;
+  //                      this.addCarts();
+  //                      setTimeout(() => {
+  //                        isForeach = true;
+  //                      }, 100);
+  //                   }
+  //                  }
+  //                });
+                if (isForeach) {
+                  CartIndex = shopIndex;
+                }
+  //              }
+  //            } else {
+  //              console.log('购物未找到该商品！');
+  //              this.addCarts();
               }
-//                val.SubGoods.forEach((data, index) => {
-//                  if (data.GoodsId !== this.goodsInfo.SubGoods[index].GoodsId) {
-//                   if (isForeach) {
-//                      this.goodsInfo.count = null;
-//                      this.goodsInfo.OrderQuantity = null;
-//                      isForeach = false;
-//                      this.addCart();
-//                      setTimeout(() => {
-//                        isForeach = true;
-//                      }, 100);
-//                   }
-//                  }
-//                });
-              if (isForeach) {
-                console.log('index:' + shopIndex);
-                CartIndex = shopIndex - 0;
+            });
+            if (CartIndex > -1) {
+              // 重复，数量+1
+              if (this.goodsInfo.count) {
+                this.goodsInfo.count++;
+                this.goodsInfo.OrderQuantity++;
+                console.log(this.goodsInfo.count);
+                console.log(this.$store.state.CartInfo[this.goodsInfo._index].count);
+                if (this.goodsInfo.count !== this.$store.state.CartInfo[this.goodsInfo._index].count) {
+                  this.$store.state.CartInfo[this.goodsInfo._index].count++;
+                  this.$store.state.CartInfo[this.goodsInfo._index].OrderQuantity++;
+                }
+                this.$store.commit('goodsInfos', this.goodsInfo);
+                this.$store.commit('addCart', 1);
               }
-//              }
-//            } else {
-//              console.log('购物未找到该商品！');
-//              this.addCart();
+            } else {
+              // 不重复，新增
+              this.addCarts();
             }
-          });
-          if (CartIndex > -1) {
-            // 重复，数量+1
-            console.log('购物车套餐商品重复！');
-            if (this.goodsInfo.count) {
-              this.goodsInfo.count++;
-              this.goodsInfo.OrderQuantity++;
-              if (this.goodsInfo.count !== this.$store.state.CartInfo[this.goodsInfo._index].count) {
-                this.$store.state.CartInfo[this.goodsInfo._index].count++;
-                this.$store.state.CartInfo[this.goodsInfo._index].OrderQuantity++;
-              }
-              this.$store.commit('goodsInfos', this.goodsInfo);
-              this.$store.commit('addCart', 1);
-            }
-          } else {
-            // 不重复，新增
-            console.log('购物车套餐商品不重复！');
-            this.addCart();
+  //        } else {
+  //          console.log('购物车为空！');
+  //          this.addCarts();
+  //        }
           }
-//        } else {
-//          console.log('购物车为空！');
-//          this.addCart();
-//        }
+          this.$emit('isClose', false);
+        } else {
+          this.$router.push('./login');
         }
-        this.$emit('isClose', false);
       },
-      addCart() {
+      addCarts() {
        // if (!this.goodsInfo.count) {
           this.$set(this.goodsInfo, 'count', 1);
           this.$set(this.goodsInfo, 'OrderQuantity', 1);
           if (this.goodsInfo.isChecked === undefined) {
             this.$set(this.goodsInfo, 'isChecked', true);
           }
-          this.$store.commit('addCart', this.goodsInfo);
+        function clone(obj) {
+          let result = {};
+          for (let key in obj) {
+            result[key] = obj[key];
+          }
+          return result;
+        }
+          this.$store.commit('addCart', clone(this.goodsInfo));
      //   }
       },
       isActives(item, item2, index) {
@@ -153,7 +170,6 @@
                 }
               });
             });
-
             this.$store.commit('goodsInfos', this.goodsInfo);
           }
         });

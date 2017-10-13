@@ -311,6 +311,8 @@
                 if (!val.SubGoods.length) {
                   this.GoodsPackage.splice(index, 1);
                 }
+                // 清空默认选中
+                val.isActive = false;
               });
               //  根据购物车存储上次选择的规格
               if (cartGoodsPackage.length) {
@@ -323,7 +325,7 @@
             }
           }).catch(() => {
             WeVue.Indicator.close();
-            this.tipToast('网络超时，请稍后再试！');
+//            this.tipToast('网络超时，请稍后再试5！');
           });
         }
       },

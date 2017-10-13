@@ -138,6 +138,13 @@
         }
       }),
       methods: {
+        tipToast (msg) {
+          WeVue.Toast({
+            duration: 2000,
+            message: msg,
+            type: 'text'
+          });
+        },
         getUserProfile(userId) {
           WeVue.Indicator.open({
             text: 'loading',
@@ -151,6 +158,7 @@
             if (!res.IsError) {
               WeVue.Indicator.close();
               this.$store.commit('CurrentUser', res.Data);
+              this.getUserAccounting(userId);
             } else {
               WeVue.Indicator.close();
               this.tipToast(res.Message);
@@ -159,15 +167,35 @@
             WeVue.Indicator.close();
             this.tipToast('网络超时，请稍后再试！');
           });
+        },
+        getUserAccounting(userId) {
+          this.axios({
+            method: 'get',
+            url: this.$store.state.passportUrl + '/api/Membership/GetUserAccounting?userId=' + userId
+          }).then((res) => {
+            if (!res.data.IsError) {
+              res = res.data.Data;
+              this.$store.state.isLogin = false;
+              this.$store.commit('CurrentUser', {Mobile: res.Mobile, type: 'Mobile'});
+              WeVue.Indicator.close();
+            } else {
+              WeVue.Indicator.close();
+              this.tipToast(res.data.Message);
+              this.$router.push('./login');
+            }
+          }).catch(() => {
+            WeVue.Indicator.close();
+            this.tipToast('网络超时，请稍后再试！');
+          });
         }
       },
       mounted() {
-        if (this.myInfo.UserId) {
-          this.getUserProfile(this.myInfo.UserId);
-        }
       },
       activated() {
         this.$nextTick(() => {
+          if (this.myInfo.UserId) {
+            this.getUserProfile(this.myInfo.UserId);
+          }
           this.$store.commit('isLoading', false);
         });
       }

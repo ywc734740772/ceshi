@@ -33,7 +33,9 @@
               <ul>
                 <li>
                   <a href="#" class="item-link item-content">
-                    <div class="item-media"><img src="/static/img/11.d0ae297.jpg" width="60"></div>
+                    <div class="item-media">
+                      <img :src="defaultImg" width="60">
+                    </div>
                     <div class="item-inner">
                       <div class="item-title-row">
                         <div class="item-title" v-text="OrderGoodsInfosItem.Name||OrderGoodsInfosItem.name2"></div>
@@ -59,7 +61,13 @@
 
 <script type="text/ecmascript-6">
   import {mapState} from 'vuex';
+  import defaultImg from '../../images/11.jpg';
   export default {
+    data() {
+      return {
+        defaultImg: defaultImg
+      };
+    },
     computed: {
       ...mapState({
         OrderGoodsInfos: (data) => {

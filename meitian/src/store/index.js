@@ -1,12 +1,13 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import * as types from './types';
+import defaultImg from '../images/cover.png';
 
 Vue.use(Vuex);
 
 const state = {
   loading: true,
-  isLogin: false,
+  isLogin: true,
   isMenu: true,
   userInfo: {},
   goodsInfo: {},
@@ -14,8 +15,9 @@ const state = {
   createOrderInfo: {},
   locationAddress: {},
   address: {},
+  editAddress: {},
   direction: 'forward',
-  imgLazyLoad: 'http://t1.itsmore.com:62006/ios.v2/img/cover.png',
+  imgLazyLoad: defaultImg,
   passportUrl: 'http://61.172.255.31:9001',
   apiUrl: 'http://at.itsmore.com',
   shopId: 28
@@ -45,10 +47,11 @@ const mutations = {
   },
   goodsInfos (state, data) {
     if (data === 'subOrder') {
-      // state.goodsInfo = {};
       state.goodsInfo.count = 0;
       delete state.goodsInfo.Quantity;
       state.goodsInfo.OrderQuantity = 0;
+    } else if (data === 'del') {
+      state.goodsInfo.count = 10;
     } else {
       state.goodsInfo = data;
     }
@@ -56,6 +59,7 @@ const mutations = {
   },
   addCart (state, data) {
     if (data.count) {
+      data.UserId = state.userInfo.UserId;
       state.CartInfo.push(data);
     }
     state.CartInfo.forEach((val, index) => {
@@ -107,6 +111,9 @@ const mutations = {
   },
   address (state, data) {
     state.address = data;
+  },
+  editAddress (state, data) {
+    state.editAddress = data;
   },
   locationAddress (state, data) {
     state.locationAddress = data;

@@ -237,7 +237,7 @@
             this.axios({
               method: 'post',
               url: this.$store.state.passportUrl + '/api/Membership/UpdateUserProfile',
-              data: qs.stringify({
+              data: {
                 UserId: this.userId,
                 Profile: {
                   RealName: this.valueTitle,
@@ -246,7 +246,7 @@
                   Birthday: this.birthday,
                   Email: this.valueEmail
                 }
-              })
+              }
             }).then((res) => {
               res = res.data;
               console.log(res);

@@ -23,6 +23,8 @@
                   <vue-core-image-upload
                     class="btn btn-primary"
                     :crop="false"
+                    :credentials="false"
+                    :inputAccept="'image/jpg,image/jpeg,image/png,image/gif'"
                     @imageuploaded="imageuploaded"
                     :max-file-size="5242880"
                     :url="`${this.$store.state.passportUrl}/api/FileUpload/UploadFile`"
@@ -148,12 +150,12 @@
               this.axios({
                 method: 'post',
                 url: this.$store.state.passportUrl + '/api/Membership/UpdateUserProfile',
-                data: qs.stringify({
+                data: {
                   UserId: this.myInfo.UserId,
                   Profile: {
                     Avatar: this.src
                   }
-                })
+                }
               }).then((res) => {
                 res = res.data;
                 if (!res.IsError) {

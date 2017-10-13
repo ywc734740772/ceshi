@@ -15,54 +15,96 @@
         <div class="page-content">
           <div class="list-block Mycenter" style="margin:10px 0;">
             <ul>
-              <li>
-                <router-link to="/addAddress" class="item-content">
+              <li @click="addAddress">
+                <a href="javascript:" class="item-content">
                   <div class="item-inner">
                     <div class="item-input" style="text-align:center;">
                       <img src="../../images/add.png">&nbsp;添加新收货地址
                     </div>
                   </div>
-                </router-link>
+                </a>
               </li>
             </ul>
           </div>
-          <div class="list-block media-list" style="margin:10px 0;">
+          <div class="list-block" style="margin:10px 0; font-size: 15px;">
             <ul>
-              <li>
-                <div class="item-content">
-                  <div class="item-inner">
-                    <div class="item-title-row">
-                      <div class="item-title">橘子 18118725189</div>
+              <li v-for="addressListItem in addressList" @click="editAddress(addressListItem)">
+                <div class="item-link item-content">
+                  <router-link :to="{path:'/addAddress'}" class="item-inner" style="align-items: flex-start; flex-direction: column; justify-content: center; background-size: 15px 20px;">
+                    <div class="item-title">
+                      <div class="item-title">
+                         <span v-text="addressListItem.Consignee"></span>
+                         <span v-text="addressListItem.Telephone"></span>
+                         <span v-text="`[${addressListItem.Alias}]`" style="color: #ff6318"></span>
+                      </div>
                     </div>
-                    <div class="item-text">上海市卢湾区南昌路203号202室</div>
-                  </div>
-                </div>
-              </li>
-              <li>
-                <div class="item-content">
-                  <div class="item-inner">
-                    <div class="item-title-row">
-                      <div class="item-title">lisa 18221819403</div>
-                    </div>
-                    <div class="item-text">上海市浦东新区张杨路3611号1座211商铺</div>
-                  </div>
+                    <div v-text="addressListItem.AddressDetail" style="font-size: 12px; color: #8e8e93;"></div>
+                  </router-link>
                 </div>
               </li>
             </ul>
           </div>
         </div>
-      </div></div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import {mapState} from 'vuex';
+  import WeVue from 'we-vue';
   export default {
     data() {
-      return {};
+      return {
+        addressList: []
+      };
     },
+    methods: {
+      tipToast (msg) {
+        WeVue.Toast({
+          duration: 2000,
+          message: msg,
+          type: 'text'
+        });
+      },
+      addAddress() {
+        this.$store.commit('editAddress', {});
+        this.$router.push('./addAddress');
+      },
+      editAddress(data) {
+        this.$store.commit('editAddress', data);
+      }
+    },
+    computed: mapState({
+      myInfo: (data) => {
+        if (!data.userInfo.Profile && localStorage.getItem('userInfo')) {
+          data.userInfo = JSON.parse(localStorage.getItem('userInfo'));
+        }
+        return data.userInfo;
+      }
+    }),
     activated() {
       this.$nextTick(() => {
         this.$store.commit('isLoading', false);
+        WeVue.Indicator.open({
+          text: 'loading',
+          spinnerType: 'double-snake'
+        });
+        this.axios({
+          method: 'get',
+          url: this.$store.state.apiUrl + '/app/Order/Getddresses?owner=' + this.myInfo.UserId
+        }).then((res) => {
+          res = res.data;
+          WeVue.Indicator.close();
+          if (!res.IsError) {
+            this.addressList = res.Data;
+          } else {
+            this.tipToast(res.Message);
+          }
+        }).catch(() => {
+          WeVue.Indicator.close();
+          this.tipToast('网络超时，请稍后再试！');
+        });
       });
     }
   };

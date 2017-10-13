@@ -106,14 +106,15 @@
           method: 'get',
           url: this.$store.state.passportUrl + '/api/Membership/GetUserAccounting?userId=' + userId
         }).then((res) => {
-          res = res.data;
-          if (!res.IsError) {
-            this.$store.commit('CurrentUser', {Mobile: res.Data.Mobile, type: 'Mobile'});
+          if (!res.data.IsError) {
+            res = res.data.Data;
+            this.$store.state.isLogin = false;
+            this.$store.commit('CurrentUser', {Mobile: res.Mobile, type: 'Mobile'});
             WeVue.Indicator.close();
             this.$router.back(-1);
           } else {
             WeVue.Indicator.close();
-            this.tipToast(res.Message);
+            this.tipToast(res.data.Message);
           }
         }).catch(() => {
           WeVue.Indicator.close();

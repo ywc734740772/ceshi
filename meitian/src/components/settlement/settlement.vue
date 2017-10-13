@@ -71,7 +71,7 @@
                           <div class="swiper-container swiper-container-order swiper-init ks-carousel-slider swiper-container-horizontal">
                             <div class="swiper-wrapper">
                               <div class="swiper-slide" v-for="ParcelItem in ParcelInfo">
-                                <img :src="ParcelItem.image||'/static/img/11.d0ae297.jpg'" width="60">
+                                <img :src="ParcelItem.image|| defaultImg" width="60">
                               </div>
                             </div>
                           </div>
@@ -140,10 +140,12 @@
   import {mapState} from 'vuex';
   import WeVue from 'we-vue';
   import qs from 'qs';
+  import defaultImg from '../../images/11.jpg';
   export default {
     data() {
       return {
-        switchValue: true
+        switchValue: true,
+        defaultImg: defaultImg
       };
     },
     computed: mapState({

@@ -37,7 +37,8 @@
                             <vue-core-image-upload
                               class="btn btn-primary"
                               :crop="false"
-                              text="上传"
+                              :credentials="false"
+                              :inputAccept="'image/jpg,image/jpeg,image/png,image/gif'"
                               @imageuploaded="imageuploaded"
                               :max-file-size="5242880"
                               :url="`${this.$store.state.passportUrl}/api/FileUpload/UploadFile`"
@@ -74,6 +75,8 @@
     },
     activated () {
       this.$nextTick(() => {
+        this.src = [];
+        this.valueContent = '';
         this.$store.commit('isLoading', false);
       });
     },
